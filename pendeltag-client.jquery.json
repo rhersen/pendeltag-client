@@ -1,0 +1,28 @@
+{
+  "name": "pendeltag-client",
+  "title": "pendeltag",
+  "description": "Realtime info about Stockholm commuter trains.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/rudolf/pendeltag-client",
+  "author": {
+    "name": "Rudolf Hersén",
+    "email": "rhersen@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rudolf/pendeltag-client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rudolf/pendeltag-client/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/rudolf/pendeltag-client/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "*"
+  },
+  "keywords": []
+}
