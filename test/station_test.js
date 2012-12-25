@@ -2,6 +2,9 @@
 /*global start:false, stop:false ok:false, equal:false, notEqual:false, deepEqual:false*/
 /*global notDeepEqual:false, strictEqual:false, notStrictEqual:false, raises:false*/
 /*global createStation:false, TouchEvent:true*/
+
+var TouchEvent;
+
 (function($) {
 
     /*
@@ -35,96 +38,46 @@
             {"time":"21:45","destination":"Östertälje"}
         ]};
 
-    function createJqueryMock() {
-        var called = {};
-        var mock = function (selector) {
-            return {
-                html:function (text) {
-                    called[selector] = text;
-                },
-                text:function (text) {
-                    if (text) {
-                        called[selector] = text;
-                    }
-                },
-                append:function () {
-                },
-                data:function () {
-                },
-                addClass:function () {
-                },
-                bind:function (e) {
-                    called[selector] = e;
-                },
-            show:function () {
-                    called['show'] = selector;
-                },
-                hide:function () {
-                    called['hide'] = selector;
-                },
-                remove:function () {
-                    called['remove'] = selector;
-                }
-            };
-        };
-        mock.ajax = function (params) {
-            called[params.dataType] = true;
-            called['cache'] = params.cache;
-        };
-        mock.getCalled = function (x) {
-            return called[x];
-        };
-
-        return mock;
-    }
-
     test('should remove all table rows', function () {
-        var lib = createJqueryMock();
-        station.setResult(lib, fixture);
-        equal(lib.getCalled('remove'), 'span.countdown');
+        station.setResult($, { "station": "Femlingsberg","updated":"21:32","northbound":[ ], "southbound":[ ]});
+        equal($('span.countdown').length, 0);
     });
 
     test('should set station name', function () {
-        var lib = createJqueryMock();
-        station.setResult(lib, fixture);
-        equal(lib.getCalled('#title'), 'Femlingsberg');
+        station.setResult($, fixture);
+        equal($('#title').html(), 'Femlingsberg');
     });
 
     test('should set update time', function () {
-        var lib = createJqueryMock();
-        station.setResult(lib, fixture);
-        equal(lib.getCalled('#updated'), '21:32');
+        station.setResult($, fixture);
+        equal($('#updated').html(), '21:32');
     });
 
     test('should set southbound station name', function () {
-        var lib = createJqueryMock();
-        station.setResult(lib, fixture);
-        equal(lib.getCalled('div#southbound :last-child'), 'Östertälje');
+        station.setResult($, fixture);
+        equal($('div#southbound .destination').html(), 'Östertälje');
     });
 
     test('should set northbound station name', function () {
-        var lib = createJqueryMock();
-        station.setResult(lib, { "station":"Flemingsberg", "updated":"21:32",
+        station.setResult($, { "station":"Flemingsberg", "updated":"21:32",
             "northbound":[ {"time":"22:29","destination":"Märsta"} ],
             "southbound":[]
         });
-        equal(lib.getCalled('div#northbound :last-child'), 'Märsta');
+        equal($('div#northbound .destination').html(), 'Märsta');
     });
 
     test('should bind mouseup', function () {
         TouchEvent = undefined;
-        var lib = createJqueryMock();
-        station.setResult(lib, fixture);
-        equal(lib.getCalled('#successor'), 'mouseup');
-        equal(lib.getCalled('#predecessor'), 'mouseup');
+        station.setResult($, fixture);
+        ok($('#successor').data('events').mouseup, 'mouseup should be bound');
+        ok($('#predecessor').data('events').mouseup, 'mouseup should be bound');
     });
 
     test('should bind touchend', function () {
         TouchEvent = 'defined';
-        var lib = createJqueryMock();
-        station.setResult(lib, fixture);
-        equal(lib.getCalled('#successor'), 'touchend');
-        equal(lib.getCalled('#predecessor'), 'touchend');
+        station.setResult($, fixture);
+        ok($('#successor').data('events').touchend, 'touchend should be bound');
+        ok($('#predecessor').data('events').touchend, 'touchend should be bound');
     });
 
 }(jQuery));
