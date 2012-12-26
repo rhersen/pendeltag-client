@@ -85,6 +85,11 @@ function createStation() {
 
         lib('span#id').text(id);
 
+        if (typeof TouchEvent === 'function') {
+            lib('#northbound').addClass('touch');
+            lib('#southbound').addClass('touch');
+        }
+
         lib('button.clear').click(function () {
             alert('pixel ratio is ' + window.devicePixelRatio);
         });

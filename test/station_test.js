@@ -74,10 +74,27 @@ var TouchEvent;
     });
 
     test('should bind touchend', function () {
-        TouchEvent = 'defined';
+        TouchEvent = function () {};
         station.setResult($, fixture);
         ok($('#successor').data('events').touchend, 'touchend should be bound');
         ok($('#predecessor').data('events').touchend, 'touchend should be bound');
+    });
+
+    test('should set id', function () {
+        station.init($, '9526');
+        equal($('#id').html(), '9526', 'should set id');
+    });
+
+    test('should not add class touch', function () {
+        TouchEvent = undefined;
+        station.init($, '9526');
+        equal($('.touch').length, 0);
+    });
+
+    test('should add class touch', function () {
+        TouchEvent = function () {};
+        station.init($, '9526');
+        equal($('.touch').length, 2);
     });
 
 }(jQuery));
