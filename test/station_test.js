@@ -55,7 +55,7 @@ var TouchEvent;
 
     test('should set southbound station name', function () {
         station.setResult($, fixture);
-        equal($('div#southbound .destination').html(), 'Östertälje');
+        equal($('#southbound').find('.destination').html(), 'Östertälje');
     });
 
     test('should set northbound station name', function () {
@@ -63,7 +63,7 @@ var TouchEvent;
             "northbound":[ {"time":"22:29","destination":"Märsta"} ],
             "southbound":[]
         });
-        equal($('div#northbound .destination').html(), 'Märsta');
+        equal($('#northbound').find('.destination').html(), 'Märsta');
     });
 
     test('should bind mouseup', function () {

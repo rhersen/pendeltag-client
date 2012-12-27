@@ -23,7 +23,7 @@ function createStation() {
         }
 
         function updateTable() {
-            lib('span.time').remove();
+            lib('section.table time').remove();
             lib('span.destination').remove();
             lib('span.countdown').remove();
             result.northbound.forEach(createDivRow('northbound'));
@@ -32,15 +32,14 @@ function createStation() {
 
         function createDivRow(trClass) {
             return function (departure) {
-                lib('div#' + trClass).append('<span></span>');
-                lib('div#' + trClass + ' :last-child').html(departure.time);
-                lib('div#' + trClass + ' :last-child').addClass('time');
-                lib('div#' + trClass).append('<span></span>');
-                lib('div#' + trClass + ' :last-child').html(names.abbreviate(departure.destination));
-                lib('div#' + trClass + ' :last-child').addClass('destination');
-                lib('div#' + trClass).append('<span></span>');
-                lib('div#' + trClass + ' :last-child').addClass('countdown');
-                lib('div#' + trClass + ' :last-child').data('time', departure.time);
+                lib('#' + trClass).append('<time></time>');
+                lib('#' + trClass + ' :last-child').html(departure.time);
+                lib('#' + trClass).append('<span></span>');
+                lib('#' + trClass + ' :last-child').html(names.abbreviate(departure.destination));
+                lib('#' + trClass + ' :last-child').addClass('destination');
+                lib('#' + trClass).append('<span></span>');
+                lib('#' + trClass + ' :last-child').addClass('countdown');
+                lib('#' + trClass + ' :last-child').data('time', departure.time);
             };
         }
 
