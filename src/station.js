@@ -1,4 +1,4 @@
-/*global expiry: false, names: false, countdown: false, alert: false */
+/*global time: false, expiry: false, names: false, countdown: false, alert: false */
 
 function createStation() {
     function updatePending(lib) {
@@ -15,10 +15,22 @@ function createStation() {
             timer.setUpdated(result.updated);
         }
 
+        function getPredecessor() {
+            return result[0].SiteId - 1;
+        }
+
+        function getCurrent() {
+            return result[0].SiteId + 0;
+        }
+
+        function getSuccessor() {
+            return result[0].SiteId + 1;
+        }
+
         function updateHtml() {
-            lib('#title').html(names.abbreviate(result.station));
-            lib('#predecessor').html(result.predecessor);
-            lib('#successor').html(result.successor);
+            lib('#title').html(names.abbreviate(result[0].StopAreaName));
+            lib('#predecessor').html(getPredecessor());
+            lib('#successor').html(getSuccessor());
             lib('#updated').html(result.updated);
         }
 
@@ -26,20 +38,20 @@ function createStation() {
             lib('section.table time').remove();
             lib('span.destination').remove();
             lib('span.countdown').remove();
-            result.northbound.forEach(createDivRow('northbound'));
-            result.southbound.forEach(createDivRow('southbound'));
+            result.forEach(createDivRow());
         }
 
-        function createDivRow(trClass) {
+        function createDivRow() {
             return function (departure) {
-                lib('#' + trClass).append('<time></time>');
-                lib('#' + trClass + ' :last-child').html(departure.time);
-                lib('#' + trClass).append('<span></span>');
-                lib('#' + trClass + ' :last-child').html(names.abbreviate(departure.destination));
-                lib('#' + trClass + ' :last-child').addClass('destination');
-                lib('#' + trClass).append('<span></span>');
-                lib('#' + trClass + ' :last-child').addClass('countdown');
-                lib('#' + trClass + ' :last-child').data('time', departure.time);
+                lib('.table').append('<time></time>');
+                var dateTime = departure.ExpectedDateTime;
+                lib('.table :last-child').html(time.getTime(dateTime));
+                lib('.table').append('<span></span>');
+                lib('.table :last-child').html(names.abbreviate(departure.Destination));
+                lib('.table :last-child').addClass('destination');
+                lib('.table').append('<span></span>');
+                lib('.table :last-child').addClass('countdown');
+                lib('.table :last-child').data('time', departure.ExpectedDateTime);
             };
         }
 
@@ -51,8 +63,9 @@ function createStation() {
             }
 
             var ev = isTouch ? 'touchend' : 'mouseup';
-            lib('#predecessor').bind(ev, getRequestSender(result.predecessor));
-            lib('#successor').bind(ev, getRequestSender(result.successor));
+            lib('#predecessor').bind(ev, getRequestSender(getPredecessor()));
+            lib('#title').bind(ev, getRequestSender(getCurrent()));
+            lib('#successor').bind(ev, getRequestSender(getSuccessor()));
         }
 
         updateTimer();
@@ -85,22 +98,24 @@ function createStation() {
         lib('span#id').text(id);
 
         if (typeof TouchEvent === 'function') {
-            lib('#northbound').addClass('touch');
-            lib('#southbound').addClass('touch');
+            lib('.table').addClass('touch');
+        } else {
+            lib('.table').addClass('mouse');
         }
 
         lib('button.clear').click(function () {
-            alert('pixel ratio is ' + window.devicePixelRatio);
+            clearInterval(intervalId);
         });
 
         if (interval) {
-            setInterval(tick, interval);
+            intervalId = setInterval(tick, interval);
         }
     }
 
     function sendRequest(lib, id) {
         timer.setRequest(new Date().getTime());
         updatePending(lib);
+        lib('#title').unbind('mouseup touchend');
         lib('#predecessor').unbind('mouseup touchend');
         lib('#successor').unbind('mouseup touchend');
         lib('#title').html(id);
@@ -120,6 +135,7 @@ function createStation() {
     }
 
     var timer = expiry.create();
+    var intervalId;
 
     return {
         setResult: setResult,

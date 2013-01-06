@@ -41,7 +41,7 @@
         var target = expiry.create();
         target.setRequest(1320000000);
         target.setResponse(1320005000);
-        target.setUpdated("7:40:00");
+        target.setUpdated("2013-01-02T07:40:00");
         ok(target.isExpired(new Date(1320065000)));
     });
 
@@ -49,7 +49,7 @@
         var target = expiry.create();
         target.setRequest(1320000000);
         target.setResponse(1320040000);
-        target.setUpdated("7:39:00");
+        target.setUpdated("2013-01-02T07:39:00");
         ok(!target.isExpired(new Date(1320045000)));
     });
 
@@ -57,7 +57,7 @@
         var target = expiry.create();
         target.setRequest(1320000000);
         target.setResponse(1320040000);
-        target.setUpdated("7:39:00");
+        target.setUpdated("2013-01-02T07:39:00");
         ok(target.isExpired(new Date(1320055000)));
     });
 
@@ -65,7 +65,7 @@
         var target = expiry.create();
         target.setRequest(1320000000);
         target.setResponse(1320001900);
-        target.setUpdated("7:39:00");
+        target.setUpdated("2013-01-02T07:39:00");
         target.setRequest(1320002000);
         ok(!target.isExpired(new Date(1320017000)));
     });
@@ -75,7 +75,7 @@
         target.setRequest(1320000000);
         target.setResponse(1320001900);
         target.setRequest(1320002000);
-        target.setUpdated("7:39:00");
+        target.setUpdated("2013-01-02T07:39:00");
         ok(target.isExpired(new Date(1320027000)));
     });
 
@@ -84,7 +84,7 @@
         target.setRequest(1320000000);
         target.setResponse(1320001900);
         target.setRequest(1320002000);
-        target.setUpdated("7:40:00");
+        target.setUpdated("2013-01-02T07:40:00");
         ok(!target.isExpired(new Date(1320027000)));
     });
 

@@ -31,16 +31,14 @@ var TouchEvent;
     module('station', {
     });
 
-    var fixture = {
-        "station":"Femlingsberg","updated":"21:32","northbound":[
-            {"time":"22:29","destination":"Märsta"}
-        ], "southbound":[
-            {"time":"21:45","destination":"Östertälje"}
-        ]};
+    var fixture = [
+        {"ExpectedDateTime":"2013-01-02T13:37:00","SiteId": 9526,"StopAreaName":"Femlingsberg","Destination":"Märsta"},
+        {"ExpectedDateTime":"2013-01-02T13:47:00","SiteId": 9526,"StopAreaName":"Femlingsberg","Destination":"Östertälje"}
+    ];
 
     test('should remove all table rows', function () {
-        station.setResult($, { "station": "Femlingsberg","updated":"21:32","northbound":[ ], "southbound":[ ]});
-        equal($('span.countdown').length, 0);
+        station.setResult($, [{"ExpectedDateTime":"2013-01-02T13:37:00","StopAreaName":"Femlingsberg","Destination":"Märsta"}]);
+        equal($('span.countdown').length, 1);
     });
 
     test('should set station name', function () {
@@ -48,22 +46,24 @@ var TouchEvent;
         equal($('#title').html(), 'Femlingsberg');
     });
 
-    test('should set update time', function () {
+    test('should set previous station', function () {
         station.setResult($, fixture);
-        equal($('#updated').html(), '21:32');
+        equal($('#predecessor').html(), '9525');
     });
 
-    test('should set southbound station name', function () {
+    test('should set next station', function () {
         station.setResult($, fixture);
-        equal($('#southbound').find('.destination').html(), 'Östertälje');
+        equal($('#successor').html(), '9527');
+    });
+
+    test('should set departure time', function () {
+        station.setResult($, fixture);
+        equal($('.table').find('time').html(), '13:37');
     });
 
     test('should set northbound station name', function () {
-        station.setResult($, { "station":"Flemingsberg", "updated":"21:32",
-            "northbound":[ {"time":"22:29","destination":"Märsta"} ],
-            "southbound":[]
-        });
-        equal($('#northbound').find('.destination').html(), 'Märsta');
+        station.setResult($, [ {"ExpectedDateTime":"22:29","Destination":"Märsta","StopAreaName":"Femlingsberg"} ]);
+        equal($('.table').find('.destination').html(), 'Märsta');
     });
 
     test('should bind mouseup', function () {
@@ -85,16 +85,16 @@ var TouchEvent;
         equal($('#id').html(), '9526', 'should set id');
     });
 
-    test('should not add class touch', function () {
+    test('should add class mouse if device is not touch', function () {
         TouchEvent = undefined;
         station.init($, '9526');
-        equal($('.touch').length, 0);
+        equal($('.mouse').length, 1);
     });
 
-    test('should add class touch', function () {
+    test('should add class touch if device is touch', function () {
         TouchEvent = function () {};
         station.init($, '9526');
-        equal($('.touch').length, 2);
+        equal($('.touch').length, 1);
     });
 
 }(jQuery));

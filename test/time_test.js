@@ -31,4 +31,12 @@
         equal(time.diff(3133, 1000).toString(), '2.133');
     });
 
+    test('should return hour and minute if seconds are zero', function () {
+        equal(time.getTime('2013-01-02T13:37:00'), '13:37');
+    });
+
+    test('should seconds too if non-zero', function () {
+        equal(time.getTime('2013-01-02T13:37:17'), '13:37:17');
+    });
+
 }(jQuery));

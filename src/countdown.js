@@ -11,12 +11,13 @@ function createCountdown() {
     }
 
     function millisSinceMidnight(time) {
+        var start = time.indexOf('T');
         var firstColon = time.indexOf(':');
         var secondColon = time.lastIndexOf(':');
-        if (firstColon < 1 || secondColon < 1) {
+        if (start < 1 || firstColon < 1 || secondColon < 1) {
             return undefined;
         } else {
-            var hour = time.substring(0, firstColon);
+            var hour = time.substring(start + 1, firstColon);
             var minute = time.substring(firstColon + 1, secondColon);
             var second = time.substring(secondColon + 1);
             return hour * HOURS + minute * MINUTES + second * SECONDS;
