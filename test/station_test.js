@@ -30,12 +30,32 @@
     });
 
     var fixture = [
-        {"ExpectedDateTime":"2013-01-02T13:37:00","SiteId": 9526,"StopAreaName":"Femlingsberg","Destination":"Märsta"},
-        {"ExpectedDateTime":"2013-01-02T13:47:00","SiteId": 9526,"StopAreaName":"Femlingsberg","Destination":"Östertälje"}
+        {
+            "ExpectedDateTime": "2013-01-02T13:37:00",
+            "SiteId": 9526,
+            "StopAreaName": "Femlingsberg",
+            "Destination": "Märsta",
+            JourneyDirection: 2
+        },
+        {
+            "ExpectedDateTime": "2013-01-02T13:47:00",
+            "SiteId": 9526,
+            "StopAreaName": "Femlingsberg",
+            "Destination": "Östertälje",
+            JourneyDirection: 1
+        }
     ];
 
-    test('should remove all table rows', function () {
-        station.setResult($, [{"ExpectedDateTime":"2013-01-02T13:37:00","StopAreaName":"Femlingsberg","Destination":"Märsta"}]);
+    test('should remove table rows', function () {
+        station.setResult($, [
+            {
+                "ExpectedDateTime": "2013-01-02T13:37:00",
+                "SiteId": 9526,
+                "StopAreaName": "Femlingsberg",
+                "Destination": "Märsta",
+                JourneyDirection: 2
+            }
+        ]);
         equal($('span.countdown').length, 1);
     });
 
@@ -59,7 +79,13 @@
         equal($('.table').find('time').html(), '13:37');
     });
 
-    test('should set northbound station name', function () {
+    test('should set direction class', function () {
+        station.setResult($, fixture);
+        equal($('.table .direction1').length, 3);
+        equal($('.table .direction2').length, 3);
+    });
+
+    test('should set station name', function () {
         station.setResult($, [ {"ExpectedDateTime":"22:29","Destination":"Märsta","StopAreaName":"Femlingsberg"} ]);
         equal($('.table').find('.destination').html(), 'Märsta');
     });

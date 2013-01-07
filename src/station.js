@@ -43,14 +43,18 @@ function createStation(isTouch) {
 
         function createDivRow() {
             return function (departure) {
+                var dir = 'direction' + departure.JourneyDirection;
                 lib('.table').append('<time></time>');
                 var dateTime = departure.ExpectedDateTime;
                 lib('.table :last-child').html(time.getTime(dateTime));
+                lib('.table :last-child').addClass(dir);
                 lib('.table').append('<span></span>');
                 lib('.table :last-child').html(names.abbreviate(departure.Destination));
                 lib('.table :last-child').addClass('destination');
+                lib('.table :last-child').addClass(dir);
                 lib('.table').append('<span></span>');
                 lib('.table :last-child').addClass('countdown');
+                lib('.table :last-child').addClass(dir);
                 lib('.table :last-child').data('time', departure.ExpectedDateTime);
             };
         }
