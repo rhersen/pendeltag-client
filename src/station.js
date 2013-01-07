@@ -1,6 +1,6 @@
-/*global time: false, expiry: false, names: false, countdown: false, alert: false */
+/*global time: false, expiry: false, names: false, countdown: false */
 
-function createStation() {
+function createStation(isTouch) {
     function updatePending(lib) {
         if (timer.isPending()) {
             lib('body').addClass('pending');
@@ -55,7 +55,7 @@ function createStation() {
             };
         }
 
-        function bindEvent(isTouch) {
+        function bindEvent() {
             function getRequestSender(id) {
                 return function () {
                     sendRequest(lib, id);
@@ -72,7 +72,7 @@ function createStation() {
         updatePending(lib);
         updateHtml();
         updateTable();
-        bindEvent(typeof TouchEvent !== 'undefined');
+        bindEvent();
     }
 
     function init(lib, id, interval) {
@@ -97,7 +97,7 @@ function createStation() {
 
         lib('span#id').text(id);
 
-        if (typeof TouchEvent === 'function') {
+        if (isTouch) {
             lib('.table').addClass('touch');
         } else {
             lib('.table').addClass('mouse');

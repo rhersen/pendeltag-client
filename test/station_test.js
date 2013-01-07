@@ -3,8 +3,6 @@
 /*global notDeepEqual:false, strictEqual:false, notStrictEqual:false, raises:false*/
 /*global createStation:false, TouchEvent:true*/
 
-var TouchEvent;
-
 (function($) {
 
     /*
@@ -67,14 +65,14 @@ var TouchEvent;
     });
 
     test('should bind mouseup', function () {
-        TouchEvent = undefined;
+        station = createStation(false);
         station.setResult($, fixture);
         ok($('#successor').data('events').mouseup, 'mouseup should be bound');
         ok($('#predecessor').data('events').mouseup, 'mouseup should be bound');
     });
 
     test('should bind touchend', function () {
-        TouchEvent = function () {};
+        station = createStation(true);
         station.setResult($, fixture);
         ok($('#successor').data('events').touchend, 'touchend should be bound');
         ok($('#predecessor').data('events').touchend, 'touchend should be bound');
@@ -86,13 +84,13 @@ var TouchEvent;
     });
 
     test('should add class mouse if device is not touch', function () {
-        TouchEvent = undefined;
+        station = createStation(false);
         station.init($, '9526');
         equal($('.mouse').length, 1);
     });
 
     test('should add class touch if device is touch', function () {
-        TouchEvent = function () {};
+        station = createStation(true);
         station.init($, '9526');
         equal($('.touch').length, 1);
     });
