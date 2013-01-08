@@ -1,15 +1,15 @@
-/*global time: false, expiry: false, names: false, countdown: false */
+/*global time: false, expiry: false, names: false, countdown: false, $: false */
 
 function createStation(isTouch) {
-    function updatePending(lib) {
+    function updatePending() {
         if (timer.isPending()) {
-            lib('body').addClass('pending');
+            $('body').addClass('pending');
         } else {
-            lib('body').removeClass('pending');
+            $('body').removeClass('pending');
         }
     }
 
-    function setResult(lib, result, currentTimeMillis) {
+    function setResult(result, currentTimeMillis) {
         function updateTimer() {
             timer.setResponse(currentTimeMillis);
             timer.setUpdated(result.updated);
@@ -28,86 +28,88 @@ function createStation(isTouch) {
         }
 
         function updateHtml() {
-            lib('#title').html(names.abbreviate(result[0].StopAreaName));
-            lib('#predecessor').html(getPredecessor());
-            lib('#successor').html(getSuccessor());
-            lib('#updated').html(result.updated);
+            $('#title').html(names.abbreviate(result[0].StopAreaName));
+            $('#predecessor').html(getPredecessor());
+            $('#successor').html(getSuccessor());
+            $('#updated').html(result.updated);
         }
 
         function updateTable() {
-            lib('section.table time').remove();
-            lib('span.destination').remove();
-            lib('span.countdown').remove();
+            $('section.table time').remove();
+            $('span.destination').remove();
+            $('span.countdown').remove();
             result.forEach(createDivRow());
         }
 
         function createDivRow() {
             return function (departure) {
                 var dir = 'direction' + departure.JourneyDirection;
-                lib('.table').append('<time></time>');
                 var dateTime = departure.ExpectedDateTime;
-                lib('.table :last-child').html(time.getTime(dateTime));
-                lib('.table :last-child').addClass(dir);
-                lib('.table').append('<span></span>');
-                lib('.table :last-child').html(names.abbreviate(departure.Destination));
-                lib('.table :last-child').addClass('destination');
-                lib('.table :last-child').addClass(dir);
-                lib('.table').append('<span></span>');
-                lib('.table :last-child').addClass('countdown');
-                lib('.table :last-child').addClass(dir);
-                lib('.table :last-child').data('time', departure.ExpectedDateTime);
+                var table = $('.table');
+                $('<time></time>')
+                    .appendTo(table)
+                    .html(time.getTime(dateTime))
+                    .addClass(dir);
+                $('<span></span>').appendTo(table)
+                    .html(names.abbreviate(departure.Destination))
+                    .addClass('destination')
+                    .addClass(dir);
+                $('<span></span>').appendTo(table)
+                    .addClass('countdown')
+                    .addClass(dir)
+                    .data('time', departure.ExpectedDateTime);
             };
         }
 
         function bindEvent() {
             function getRequestSender(id) {
                 return function () {
-                    sendRequest(lib, id);
+                    sendRequest(id);
                 };
             }
 
             var ev = isTouch ? 'touchend' : 'mouseup';
-            lib('#predecessor').bind(ev, getRequestSender(getPredecessor()));
-            lib('#title').bind(ev, getRequestSender(getCurrent()));
-            lib('#successor').bind(ev, getRequestSender(getSuccessor()));
+            $('#predecessor').bind(ev, getRequestSender(getPredecessor()));
+            $('#title').bind(ev, getRequestSender(getCurrent()));
+            $('#successor').bind(ev, getRequestSender(getSuccessor()));
         }
 
         updateTimer();
-        updatePending(lib);
+        updatePending();
         updateHtml();
         updateTable();
         bindEvent();
     }
 
-    function init(lib, id, interval) {
+    function init(id, interval) {
         function tick() {
             function setCountdowns() {
                 var now = new Date();
 
-                lib('span.countdown').each(function () {
-                    var time = lib(this).data('time');
-                    lib(this).html(countdown.getCountdown(time, now));
+                $('span.countdown').each(function () {
+                    var time = $(this).data('time');
+                    $(this).html(countdown.getCountdown(time, now));
                 });
             }
 
-            lib('#expired').html((timer.getDebugString()));
+            $('#expired').html((timer.getDebugString()));
 
             setCountdowns();
 
             if (timer.isExpired(new Date())) {
-                sendRequest(lib, lib('span#id').text());
+                sendRequest($('span#id').text());
             }
         }
 
-        lib('span#id').text(id);
+        $('span#id').text(id);
 
         if (isTouch) {
-            lib('.table').addClass('touch');
+            $('.table').addClass('touch');
         } else {
-            lib('.table').addClass('mouse');
+            $('.table').addClass('mouse');
         }
 
-        lib('button.clear').click(function () {
+        $('button.clear').click(function () {
             clearInterval(intervalId);
         });
 
@@ -116,26 +118,23 @@ function createStation(isTouch) {
         }
     }
 
-    function sendRequest(lib, id) {
+    function sendRequest(id) {
         timer.setRequest(new Date().getTime());
-        updatePending(lib);
-        lib('#title').unbind('mouseup touchend');
-        lib('#predecessor').unbind('mouseup touchend');
-        lib('#successor').unbind('mouseup touchend');
-        lib('#title').html(id);
-        lib('#predecessor').html(' ');
-        lib('#successor').html(' ');
+        updatePending();
+        $('#title').unbind('mouseup touchend').html(id);
+        $('#predecessor').unbind('mouseup touchend').html(' ');
+        $('#successor').unbind('mouseup touchend').html(' ');
 
-        lib.ajax({
+        $.ajax({
             url: '/departures/' + id + '.json',
             dataType: 'json',
             cache: false,
             success: function (result) {
-                setResult(lib, result, new Date().getTime());
+                setResult(result, new Date().getTime());
             }
         });
 
-        lib('span#id').text(id);
+        $('span#id').text(id);
     }
 
     var timer = expiry.create();
