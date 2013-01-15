@@ -31,29 +31,41 @@
 
     var fixture = [
         {
-            "ExpectedDateTime": "2013-01-02T13:37:00",
-            "SiteId": 9526,
-            "StopAreaName": "Femlingsberg",
+            JourneyDirection: 2,
             "Destination": "Märsta",
-            JourneyDirection: 2
+            Stops: [
+                {
+                    "SiteId": 9526,
+                    "StopAreaName": "Femlingsberg",
+                    "ExpectedDateTime": "2013-01-02T13:37:00"
+                }
+            ]
         },
         {
-            "ExpectedDateTime": "2013-01-02T13:47:00",
-            "SiteId": 9526,
-            "StopAreaName": "Femlingsberg",
+            JourneyDirection: 1,
             "Destination": "Östertälje",
-            JourneyDirection: 1
+            Stops: [
+                {
+                    "ExpectedDateTime": "2013-01-02T13:47:00",
+                    "SiteId": 9526,
+                    "StopAreaName": "Femlingsberg"
+                }
+            ]
         }
     ];
 
     test('should remove table rows', function () {
         station.setResult([
             {
-                "ExpectedDateTime": "2013-01-02T13:37:00",
-                "SiteId": 9526,
-                "StopAreaName": "Femlingsberg",
+                JourneyDirection: 2,
                 "Destination": "Märsta",
-                JourneyDirection: 2
+                Stops: [
+                    {
+                        "SiteId": 9526,
+                        "StopAreaName": "Femlingsberg",
+                        "ExpectedDateTime": "2013-01-02T13:37:00"
+                    }
+                ]
             }
         ]);
         equal($('span.countdown').length, 1);
@@ -83,11 +95,6 @@
         station.setResult(fixture);
         equal($('.table .direction1').length, 3);
         equal($('.table .direction2').length, 3);
-    });
-
-    test('should set station name', function () {
-        station.setResult([ {"ExpectedDateTime":"22:29","Destination":"Märsta","StopAreaName":"Femlingsberg"} ]);
-        equal($('.table').find('.destination').html(), 'Märsta');
     });
 
     test('should bind mouseup', function () {

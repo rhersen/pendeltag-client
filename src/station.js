@@ -16,19 +16,19 @@ function createStation(isTouch) {
         }
 
         function getPredecessor() {
-            return result[0].SiteId - 1;
+            return result[0].Stops[0].SiteId - 1;
         }
 
         function getCurrent() {
-            return result[0].SiteId + 0;
+            return result[0].Stops[0].SiteId + 0;
         }
 
         function getSuccessor() {
-            return result[0].SiteId + 1;
+            return result[0].Stops[0].SiteId + 1;
         }
 
         function updateHtml() {
-            $('#title').html(names.abbreviate(result[0].StopAreaName));
+            $('#title').html(names.abbreviate(result[0].Stops[0].StopAreaName));
             $('#predecessor').html(getPredecessor());
             $('#successor').html(getSuccessor());
             $('#updated').html(result.updated);
@@ -44,7 +44,7 @@ function createStation(isTouch) {
         function createDivRow() {
             return function (departure) {
                 var dir = 'direction' + departure.JourneyDirection;
-                var dateTime = departure.ExpectedDateTime;
+                var dateTime = departure.Stops[0].ExpectedDateTime;
                 var table = $('.table');
                 $('<time></time>')
                     .appendTo(table)
@@ -57,7 +57,7 @@ function createStation(isTouch) {
                 $('<span></span>').appendTo(table)
                     .addClass('countdown')
                     .addClass(dir)
-                    .data('time', departure.ExpectedDateTime);
+                    .data('time', departure.Stops[0].ExpectedDateTime);
             };
         }
 
