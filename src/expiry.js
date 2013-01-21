@@ -14,8 +14,7 @@ expiry.create = function () {
                 getTimeSinceResponse(date.getTime()) > 10;
         }
 
-        var expired = requestTime === undefined || areTimeLimitsReached(date);
-        return expired;
+        return requestTime === undefined || areTimeLimitsReached(date);
     }
 
     function isPending() {

@@ -1,4 +1,4 @@
-/*global time: false, expiry: false, names: false, countdown: false, $: false */
+/*global time: false, expiry: false, names: false, countdown: false, $: false, _: false */
 
 function createStation(isTouch) {
     function updatePending() {
@@ -9,42 +9,41 @@ function createStation(isTouch) {
         }
     }
 
-    function setResult(result, currentTimeMillis) {
+    function setResult(trains, currentTimeMillis) {
         function updateTimer() {
             timer.setResponse(currentTimeMillis);
-            timer.setUpdated(result.updated);
+            timer.setUpdated(trains.updated);
         }
 
         function getPredecessor() {
-            return result[0].Stops[0].SiteId - 1;
+            return _.first(_.first(trains).Stops).SiteId - 1;
         }
 
         function getCurrent() {
-            return result[0].Stops[0].SiteId + 0;
+            return _.first(_.first(trains).Stops).SiteId + 0;
         }
 
         function getSuccessor() {
-            return result[0].Stops[0].SiteId + 1;
+            return _.first(_.first(trains).Stops).SiteId + 1;
         }
 
         function updateHtml() {
-            $('#title').html(names.abbreviate(result[0].Stops[0].StopAreaName));
+            $('#title').html(names.abbreviate(_.first(_.first(trains).Stops).StopAreaName));
             $('#predecessor').html(getPredecessor());
             $('#successor').html(getSuccessor());
-            $('#updated').html(result.updated);
+            $('#updated').html(trains.updated);
         }
 
         function updateTable() {
             $('section.table time').remove();
             $('span.destination').remove();
             $('span.countdown').remove();
-            result.forEach(createDivRow());
+            _.each(trains, createDivRow);
         }
 
-        function createDivRow() {
-            return function (departure) {
+        function createDivRow(departure) {
                 var dir = 'direction' + departure.JourneyDirection;
-                var dateTime = departure.Stops[0].ExpectedDateTime;
+                var dateTime = _.first(departure.Stops).ExpectedDateTime;
                 var table = $('.table');
                 $('<time></time>')
                     .appendTo(table)
@@ -57,8 +56,7 @@ function createStation(isTouch) {
                 $('<span></span>').appendTo(table)
                     .addClass('countdown')
                     .addClass(dir)
-                    .data('time', departure.Stops[0].ExpectedDateTime);
-            };
+                    .data('time', _.first(departure.Stops).ExpectedDateTime);
         }
 
         function bindEvent() {

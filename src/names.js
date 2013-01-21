@@ -1,19 +1,26 @@
+/*global _: false */
+
 var names = {
     abbreviate: function (name) {
-        function createReplacement(removal) {
-            return [removal, ''];
+
+        function getRemovalAbbreviations() {
+            return _.map(
+                [/^Upplands /, /^Stockholms /, /^T-/, /amn$/, /entrum$/],
+                function (removal) {
+                    return {pattern: removal, replacement: ''};
+                }
+            );
         }
 
-        function replace(name, replacement) {
-            return name.replace(replacement[0], replacement[1]);
+        function replace(name, abbreviation) {
+            return name.replace(abbreviation.pattern, abbreviation.replacement);
         }
 
-        var removals = [/^Upplands /, /^Stockholms /, /^T-/, /amn$/, /entrum$/];
-        var replacements = [
-            [/^Väster/, 'V‧'],
-            [/^Flemings/, 'F‧']
+        var abbreviations = [
+            {pattern: /^Väster/, replacement: 'V‧'},
+            {pattern: /^Flemings/, replacement: 'F‧'}
         ];
 
-        return replacements.concat(removals.map(createReplacement)).reduce(replace, name);
+        return _.reduce(abbreviations.concat(getRemovalAbbreviations()), replace, name);
     }
 };
