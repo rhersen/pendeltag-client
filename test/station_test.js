@@ -74,7 +74,7 @@
                 ]
             }
         ]);
-        equal($('td.countdown').length, 1);
+        equal($('tr').length, 1);
     });
 
     test('should set station name', function () {

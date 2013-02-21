@@ -35,9 +35,7 @@ function createStation(isTouch) {
         }
 
         function updateTable() {
-            $('section.table time').remove();
-            $('span.destination').remove();
-            $('span.countdown').remove();
+            $('tr').remove();
             _.each(trains, createDivRow);
         }
 
