@@ -42,21 +42,25 @@ function createStation(isTouch) {
         }
 
         function createDivRow(departure) {
-                var dir = 'direction' + departure.JourneyDirection;
-                var dateTime = _.first(departure.Stops).ExpectedDateTime;
-                var table = $('.table');
-                $('<time></time>')
+            var dir = 'direction' + departure.JourneyDirection;
+            var tabl = $('.table');
+            var table = $('<tr></tr>').appendTo(tabl);
+            $('<td></td>').appendTo(table)
+                .html(names.abbreviate(departure.Destination))
+                .addClass('destination')
+                .addClass(dir);
+            _.each(departure.Stops, function (stop) {
+                var dateTime = stop.ExpectedDateTime;
+                $('<td></td>')
                     .appendTo(table)
                     .html(time.getTime(dateTime))
+                    .addClass('time')
                     .addClass(dir);
-                $('<span></span>').appendTo(table)
-                    .html(names.abbreviate(departure.Destination))
-                    .addClass('destination')
-                    .addClass(dir);
-                $('<span></span>').appendTo(table)
-                    .addClass('countdown')
-                    .addClass(dir)
-                    .data('time', _.first(departure.Stops).ExpectedDateTime);
+            });
+            $('<td></td>').appendTo(table)
+                .addClass('countdown')
+                .addClass(dir)
+                .data('time', _.first(departure.Stops).ExpectedDateTime);
         }
 
         function bindEvent() {

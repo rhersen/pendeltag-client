@@ -3,7 +3,7 @@
 /*global notDeepEqual:false, strictEqual:false, notStrictEqual:false, raises:false*/
 /*global createStation:false, TouchEvent:true*/
 
-(function($) {
+(function ($) {
 
     /*
      ======== A Handy Little QUnit Reference ========
@@ -39,6 +39,7 @@
                     "StopAreaName": "Femlingsberg",
                     "ExpectedDateTime": "2013-01-02T13:37:00"
                 }
+
             ]
         },
         {
@@ -49,6 +50,11 @@
                     "ExpectedDateTime": "2013-01-02T13:47:00",
                     "SiteId": 9526,
                     "StopAreaName": "Femlingsberg"
+                },
+                {
+                    "SiteId": 9525,
+                    "StopAreaName": "Tulunge",
+                    "ExpectedDateTime": "2013-01-02T13:50:00"
                 }
             ]
         }
@@ -68,7 +74,7 @@
                 ]
             }
         ]);
-        equal($('span.countdown').length, 1);
+        equal($('td.countdown').length, 1);
     });
 
     test('should set station name', function () {
@@ -88,12 +94,22 @@
 
     test('should set departure time', function () {
         station.setResult(fixture);
-        equal($('.table').find('time').html(), '13:37');
+        equal($('.table').find('.time').eq(2).html(), '13:37');
+    });
+
+    test('should generate time for every stop', function () {
+        station.setResult(fixture);
+        equal($('.table').find('td.time').length, 3);
+    });
+
+    test('should create rows', function () {
+        station.setResult(fixture);
+        equal($('tr').length, 2);
     });
 
     test('should set direction class', function () {
         station.setResult(fixture);
-        equal($('.table .direction1').length, 3);
+        equal($('.table .direction1').length, 4);
         equal($('.table .direction2').length, 3);
     });
 
