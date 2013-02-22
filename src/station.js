@@ -36,26 +36,28 @@ function createStation(isTouch) {
 
         function updateTable() {
             $('tr').remove();
+            var header = $('<tr></tr>').appendTo($('.table'));
+            $('<th></th>').appendTo(header)
+                .html('Destination');
             _.each(trains, createDivRow);
         }
 
         function createDivRow(departure) {
             var dir = 'direction' + departure.JourneyDirection;
-            var tabl = $('.table');
-            var table = $('<tr></tr>').appendTo(tabl);
-            $('<td></td>').appendTo(table)
+            var row = $('<tr></tr>').appendTo($('.table'));
+            $('<td></td>').appendTo(row)
                 .html(names.abbreviate(departure.Destination))
                 .addClass('destination')
                 .addClass(dir);
             _.each(departure.Stops, function (stop) {
                 var dateTime = stop.ExpectedDateTime;
                 $('<td></td>')
-                    .appendTo(table)
+                    .appendTo(row)
                     .html(time.getTime(dateTime))
                     .addClass('time')
                     .addClass(dir);
             });
-            $('<td></td>').appendTo(table)
+            $('<td></td>').appendTo(row)
                 .addClass('countdown')
                 .addClass(dir)
                 .data('time', _.first(departure.Stops).ExpectedDateTime);

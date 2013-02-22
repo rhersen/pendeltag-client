@@ -61,6 +61,8 @@
     ];
 
     test('should remove table rows', function () {
+        station.setResult(fixture);
+
         station.setResult([
             {
                 JourneyDirection: 2,
@@ -74,7 +76,7 @@
                 ]
             }
         ]);
-        equal($('tr').length, 1);
+        equal($('tr').length, 2);
     });
 
     test('should set station name', function () {
@@ -104,7 +106,12 @@
 
     test('should create rows', function () {
         station.setResult(fixture);
-        equal($('tr').length, 2);
+        equal($('tr').length, 3);
+    });
+
+    test('should create header', function () {
+        station.setResult(fixture);
+        equal($('th').length, 1);
     });
 
     test('should set direction class', function () {
