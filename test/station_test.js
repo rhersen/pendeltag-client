@@ -36,7 +36,7 @@
             Stops: [
                 {
                     "SiteId": 9526,
-                    "StopAreaName": "Femlingsberg",
+                    "StopAreaName": "Flemingsberg",
                     "ExpectedDateTime": "2013-01-02T13:37:00"
                 }
 
@@ -49,7 +49,7 @@
                 {
                     "ExpectedDateTime": "2013-01-02T13:47:00",
                     "SiteId": 9526,
-                    "StopAreaName": "Femlingsberg"
+                    "StopAreaName": "Flemingsberg"
                 },
                 {
                     "SiteId": 9525,
@@ -70,7 +70,7 @@
                 Stops: [
                     {
                         "SiteId": 9526,
-                        "StopAreaName": "Femlingsberg",
+                        "StopAreaName": "Flemingsberg",
                         "ExpectedDateTime": "2013-01-02T13:37:00"
                     }
                 ]
@@ -81,7 +81,7 @@
 
     test('should set station name', function () {
         station.setResult(fixture);
-        equal($('#title').html(), 'Femlingsberg');
+        equal($('#title').html(), 'F‧berg');
     });
 
     test('should set previous station', function () {
@@ -111,7 +111,14 @@
 
     test('should create header', function () {
         station.setResult(fixture);
-        equal($('th').length, 1);
+        equal($('th').first().html(), 'Destination');
+    });
+
+    test('should abbreviate station names in header', function () {
+        station.setResult(fixture);
+        var th = $('th');
+        equal(th.length, 2);
+        equal(th.eq(1).html(), 'F‧berg');
     });
 
     test('should set direction class', function () {

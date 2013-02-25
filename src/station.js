@@ -37,8 +37,11 @@ function createStation(isTouch) {
         function updateTable() {
             $('tr').remove();
             var header = $('<tr></tr>').appendTo($('.table'));
-            $('<th></th>').appendTo(header)
-                .html('Destination');
+            $('<th></th>').appendTo(header).html('Destination');
+            var departure = trains[0];
+            _.each(departure.Stops, function (stop) {
+                $('<th></th>').appendTo(header).html(names.abbreviate(stop.StopAreaName));
+            });
             _.each(trains, createDivRow);
         }
 
