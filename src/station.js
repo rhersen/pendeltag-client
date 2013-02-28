@@ -9,7 +9,7 @@ function createStation(isTouch) {
         }
     }
 
-    function setResult(trains, currentTimeMillis) {
+    function setResult(result, currentTimeMillis) {
         function updateTimer() {
             timer.setResponse(currentTimeMillis);
             timer.setUpdated(trains.updated);
@@ -28,7 +28,7 @@ function createStation(isTouch) {
         }
 
         function updateHtml() {
-            $('#title').html(names.abbreviate(_.first(_.first(trains).Stops).StopAreaName));
+            $('#title').html(names.abbreviate(_.first(result.stops).StopAreaName));
             $('#predecessor').html(getPredecessor());
             $('#successor').html(getSuccessor());
             $('#updated').html(trains.updated);
@@ -38,8 +38,7 @@ function createStation(isTouch) {
             $('tr').remove();
             var header = $('<tr></tr>').appendTo($('.table'));
             $('<th></th>').appendTo(header).html('Destination');
-            var departure = trains[0];
-            _.each(departure.Stops, function (stop) {
+            _.each(result.stops, function (stop) {
                 $('<th></th>').appendTo(header).html(names.abbreviate(stop.StopAreaName));
             });
             _.each(trains, createDivRow);
@@ -78,6 +77,8 @@ function createStation(isTouch) {
             $('#title').bind(ev, getRequestSender(getCurrent()));
             $('#successor').bind(ev, getRequestSender(getSuccessor()));
         }
+
+        var trains = result.trains;
 
         updateTimer();
         updatePending();

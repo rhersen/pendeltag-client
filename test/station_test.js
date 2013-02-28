@@ -29,69 +29,71 @@
     module('station', {
     });
 
-    var fixture = [
-        {
-            JourneyDirection: 2,
-            "Destination": "Märsta",
-            Stops: [
-                {
-                    "SiteId": 9526,
-                    "StopAreaName": "Flemingsberg",
-                    "ExpectedDateTime": "2013-01-02T13:37:00"
-                }
-
-            ]
-        },
-        {
-            JourneyDirection: 1,
-            "Destination": "Östertälje",
-            Stops: [
-                {
-                    "ExpectedDateTime": "2013-01-02T13:47:00",
-                    "SiteId": 9526,
-                    "StopAreaName": "Flemingsberg"
-                },
-                {
-                    "SiteId": 9525,
-                    "StopAreaName": "Tulunge",
-                    "ExpectedDateTime": "2013-01-02T13:50:00"
-                }
-            ]
-        }
-    ];
-
-    test('should remove table rows', function () {
-        station.setResult(fixture);
-
-        station.setResult([
+    var fixture = {
+        trains: [
             {
                 JourneyDirection: 2,
                 "Destination": "Märsta",
                 Stops: [
                     {
-                        "SiteId": 9526,
-                        "StopAreaName": "Flemingsberg",
                         "ExpectedDateTime": "2013-01-02T13:37:00"
+                    }
+
+                ]
+            },
+            {
+                JourneyDirection: 1,
+                "Destination": "Östertälje",
+                Stops: [
+                    {
+                        "ExpectedDateTime": "2013-01-02T13:47:00"
+                    },
+                    {
+                        "ExpectedDateTime": "2013-01-02T13:50:00"
                     }
                 ]
             }
-        ]);
+        ],
+        stops: [
+            {
+                "SiteId": 9526,
+                "StopAreaName": "Flemingsberg"
+            },
+            {
+                "SiteId": 9525,
+                "StopAreaName": "Tulunge"
+            }
+        ]
+    };
+
+    test('should remove table rows', function () {
+        station.setResult(fixture);
+
+        station.setResult({
+            trains: [
+                {
+                    JourneyDirection: 2,
+                    "Destination": "Märsta",
+                    Stops: [
+                        {
+                            "ExpectedDateTime": "2013-01-02T13:37:00"
+                        }
+                    ]
+                }
+            ],
+            stops: [
+                {
+                    "SiteId": 9526,
+                    "StopAreaName": "Flemingsberg"
+                }
+            ]
+        });
         equal($('tr').length, 2);
     });
 
     test('should set station name', function () {
         station.setResult(fixture);
         equal($('#title').html(), 'F‧berg');
-    });
-
-    test('should set previous station', function () {
-        station.setResult(fixture);
-        equal($('#predecessor').html(), '9525');
-    });
-
-    test('should set next station', function () {
-        station.setResult(fixture);
-        equal($('#successor').html(), '9527');
     });
 
     test('should set departure time', function () {
@@ -117,7 +119,6 @@
     test('should abbreviate station names in header', function () {
         station.setResult(fixture);
         var th = $('th');
-        equal(th.length, 2);
         equal(th.eq(1).html(), 'F‧berg');
     });
 
