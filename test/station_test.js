@@ -29,65 +29,28 @@
     module('station', {
     });
 
-    var fixture = {
-        trains: [
-            {
-                JourneyDirection: 2,
-                "Destination": "Märsta",
-                Stops: [
-                    {
-                        "ExpectedDateTime": "2013-01-02T13:37:00"
-                    }
-
-                ]
-            },
-            {
-                JourneyDirection: 1,
-                "Destination": "Östertälje",
-                Stops: [
-                    {
-                        "ExpectedDateTime": "2013-01-02T13:47:00"
-                    },
-                    {
-                        "ExpectedDateTime": "2013-01-02T13:50:00"
-                    }
-                ]
-            }
-        ],
-        stops: [
-            {
-                "SiteId": 9526,
-                "StopAreaName": "Flemingsberg"
-            },
-            {
-                "SiteId": 9525,
-                "StopAreaName": "Tulunge"
-            }
-        ]
-    };
+    var fixture = { trains: [
+        { JourneyDirection: 2, "Destination": "Märsta",
+            "9526": { "ExpectedDateTime": "2013-01-02T13:37:00" },
+            "9525": { "ExpectedDateTime": "2013-01-02T13:40:00" }
+        },
+        { JourneyDirection: 1, "Destination": "Östertälje",
+            "9526": { "ExpectedDateTime": "2013-01-02T13:47:00" },
+            "9525": { "ExpectedDateTime": "2013-01-02T13:50:00" }}
+    ], stops: [
+        { "SiteId": 9526, "StopAreaName": "Flemingsberg" },
+        { "SiteId": 9525, "StopAreaName": "Tulunge" }
+    ] };
 
     test('should remove table rows', function () {
         station.setResult(fixture);
 
         station.setResult({
             trains: [
-                {
-                    JourneyDirection: 2,
-                    "Destination": "Märsta",
-                    Stops: [
-                        {
-                            "ExpectedDateTime": "2013-01-02T13:37:00"
-                        }
-                    ]
-                }
-            ],
-            stops: [
-                {
-                    "SiteId": 9526,
-                    "StopAreaName": "Flemingsberg"
-                }
-            ]
-        });
+                { JourneyDirection: 2, "Destination": "Märsta", "9526": { "ExpectedDateTime": "2013-01-02T13:37:00" } }
+            ], stops: [
+                { "SiteId": 9526, "StopAreaName": "Flemingsberg" }
+            ] });
         equal($('tr').length, 2);
     });
 
@@ -103,7 +66,7 @@
 
     test('should generate time for every stop', function () {
         station.setResult(fixture);
-        equal($('.table').find('td.time').length, 3);
+        equal($('.table').find('td.time').length, 4);
     });
 
     test('should create rows', function () {
@@ -125,7 +88,7 @@
     test('should set direction class', function () {
         station.setResult(fixture);
         equal($('.table .direction1').length, 4);
-        equal($('.table .direction2').length, 3);
+        equal($('.table .direction2').length, 4);
     });
 
     test('should bind mouseup', function () {

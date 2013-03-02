@@ -16,15 +16,15 @@ function createStation(isTouch) {
         }
 
         function getPredecessor() {
-            return _.first(_.first(trains).Stops).SiteId - 1;
+            return _.first(result.stops).SiteId - 1;
         }
 
         function getCurrent() {
-            return _.first(_.first(trains).Stops).SiteId + 0;
+            return _.first(result.stops).SiteId + 0;
         }
 
         function getSuccessor() {
-            return _.first(_.first(trains).Stops).SiteId + 1;
+            return _.first(result.stops).SiteId + 1;
         }
 
         function updateHtml() {
@@ -51,7 +51,8 @@ function createStation(isTouch) {
                 .html(names.abbreviate(departure.Destination))
                 .addClass('destination')
                 .addClass(dir);
-            _.each(departure.Stops, function (stop) {
+            _.each(result.stops, function (resultStop) {
+                var stop = departure[resultStop.SiteId];
                 var dateTime = stop.ExpectedDateTime;
                 $('<td></td>')
                     .appendTo(row)
@@ -62,7 +63,7 @@ function createStation(isTouch) {
             $('<td></td>').appendTo(row)
                 .addClass('countdown')
                 .addClass(dir)
-                .data('time', _.first(departure.Stops).ExpectedDateTime);
+                .data('time', departure[_.first(result.stops).SiteId].ExpectedDateTime);
         }
 
         function bindEvent() {
