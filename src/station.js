@@ -35,12 +35,29 @@ function createStation(isTouch) {
         }
 
         function updateTable() {
+            function createHeaderRow(heading, values) {
+                function appendTh(html) {
+                    $('<th></th>').appendTo(header).html(html);
+                }
+
+                var header = $('<tr></tr>').appendTo($('.table'));
+                appendTh(heading);
+                _.each(_.map(result.stops, values), appendTh);
+            }
+
+            function getSiteId(stop) {
+                return stop.SiteId;
+            }
+
+            function getName(stop) {
+                return names.abbreviate(stop.StopAreaName);
+            }
+
             $('tr').remove();
-            var header = $('<tr></tr>').appendTo($('.table'));
-            $('<th></th>').appendTo(header).html('Destination');
-            _.each(result.stops, function (stop) {
-                $('<th></th>').appendTo(header).html(names.abbreviate(stop.StopAreaName));
-            });
+
+            createHeaderRow('id', getSiteId);
+            createHeaderRow('Destination', getName);
+
             _.each(trains, createDivRow);
         }
 

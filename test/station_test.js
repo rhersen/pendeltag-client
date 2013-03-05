@@ -51,7 +51,7 @@
             ], stops: [
                 { "SiteId": 9526, "StopAreaName": "Flemingsberg" }
             ] });
-        equal($('tr').length, 2);
+        equal($('tr').length, 3);
     });
 
     test('should set station name', function () {
@@ -71,18 +71,19 @@
 
     test('should create rows', function () {
         station.setResult(fixture);
-        equal($('tr').length, 3);
+        equal($('tr').length, 4);
     });
 
-    test('should create header', function () {
+    test('should create header row with SiteId:s', function () {
         station.setResult(fixture);
-        equal($('th').first().html(), 'Destination');
+        equal($('tr:nth(0) th:nth(0)').html(), 'id');
+        equal($('tr:nth(0) th:nth(1)').html(), '9526');
     });
 
-    test('should abbreviate station names in header', function () {
+    test('should create header with abbreviated station names', function () {
         station.setResult(fixture);
-        var th = $('th');
-        equal(th.eq(1).html(), 'F‧berg');
+        equal($('tr:nth(1) th:nth(0)').html(), 'Destination');
+        equal($('tr:nth(1) th:nth(1)').html(), 'F‧berg');
     });
 
     test('should set direction class', function () {
