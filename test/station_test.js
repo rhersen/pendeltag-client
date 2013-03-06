@@ -38,8 +38,8 @@
             "9526": { "ExpectedDateTime": "2013-01-02T13:47:00" },
             "9525": { "ExpectedDateTime": "2013-01-02T13:50:00" }}
     ], stops: [
-        { "SiteId": 9526, "StopAreaName": "Flemingsberg" },
-        { "SiteId": 9525, "StopAreaName": "Tulunge" }
+        { "SiteId": 9526, "StopAreaName": "Flemingsberg", LatestUpdate: "2013-01-02T13:35:23.5506461+01:00" },
+        { "SiteId": 9525, "StopAreaName": "Tulunge", LatestUpdate: "2013-01-02T13:34:23.5506461+01:00" }
     ] };
 
     test('should remove table rows', function () {
@@ -49,9 +49,9 @@
             trains: [
                 { JourneyDirection: 2, "Destination": "Märsta", "9526": { "ExpectedDateTime": "2013-01-02T13:37:00" } }
             ], stops: [
-                { "SiteId": 9526, "StopAreaName": "Flemingsberg" }
+                { "SiteId": 9526, "StopAreaName": "Flemingsberg", LatestUpdate: "2013-01-02T13:33:23.5506461+01:00" }
             ] });
-        equal($('tr').length, 3);
+        equal($('tr td:nth(0)').length, 1);
     });
 
     test('should set station name', function () {
@@ -71,7 +71,7 @@
 
     test('should create rows', function () {
         station.setResult(fixture);
-        equal($('tr').length, 4);
+        equal($('tr td:nth(0)').length, 1);
     });
 
     test('should create header row with SiteId:s', function () {
@@ -80,10 +80,16 @@
         equal($('tr:nth(0) th:nth(1)').html(), '9526');
     });
 
+    test('should create header with update time', function () {
+        station.setResult(fixture);
+        equal($('tr:nth(1) th:nth(0)').html(), 'uppdaterad');
+        equal($('tr:nth(1) th:nth(1)').html(), '13:35:23');
+    });
+
     test('should create header with abbreviated station names', function () {
         station.setResult(fixture);
-        equal($('tr:nth(1) th:nth(0)').html(), 'Destination');
-        equal($('tr:nth(1) th:nth(1)').html(), 'F‧berg');
+        equal($('tr:nth(2) th:nth(0)').html(), 'station');
+        equal($('tr:nth(2) th:nth(1)').html(), 'F‧berg');
     });
 
     test('should set direction class', function () {

@@ -49,6 +49,10 @@ function createStation(isTouch) {
                 return stop.SiteId;
             }
 
+            function getLatestUpdate(stop) {
+                return (/T(\d+:\d+:\d+)/).exec(stop.LatestUpdate)[1];
+            }
+
             function getName(stop) {
                 return names.abbreviate(stop.StopAreaName);
             }
@@ -56,7 +60,8 @@ function createStation(isTouch) {
             $('tr').remove();
 
             createHeaderRow('id', getSiteId);
-            createHeaderRow('Destination', getName);
+            createHeaderRow('uppdaterad', getLatestUpdate);
+            createHeaderRow('station', getName);
 
             _.each(trains, createDivRow);
         }
