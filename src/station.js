@@ -75,17 +75,12 @@ function createStation(isTouch) {
                 .addClass(dir);
             _.each(result.stops, function (resultStop) {
                 var stop = departure[resultStop.SiteId];
-                var dateTime = stop.ExpectedDateTime;
                 $('<td></td>')
                     .appendTo(row)
-                    .html(time.getTime(dateTime))
+                    .html(stop ? time.getTime(stop.ExpectedDateTime) : ' ')
                     .addClass('time')
                     .addClass(dir);
             });
-            $('<td></td>').appendTo(row)
-                .addClass('countdown')
-                .addClass(dir)
-                .data('time', departure[_.first(result.stops).SiteId].ExpectedDateTime);
         }
 
         function bindEvent() {
