@@ -120,6 +120,7 @@
         station.setResult(fixture);
         ok($('#successor').data('events').mouseup, 'mouseup should be bound');
         ok($('#predecessor').data('events').mouseup, 'mouseup should be bound');
+        ok($('tr:nth(0) th:nth(1)').data('events').mouseup, 'mouseup should be bound');
     });
 
     test('should bind touchend', function () {

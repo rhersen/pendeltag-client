@@ -36,13 +36,16 @@ function createStation(isTouch) {
 
         function updateTable() {
             function createHeaderRow(heading, values) {
-                function appendTh(html) {
-                    $('<th></th>').appendTo(header).html(html);
-                }
-
                 var header = $('<tr></tr>').appendTo($('.table'));
-                appendTh(heading);
-                _.each(_.map(result.stops, values), appendTh);
+                $('<th></th>').appendTo(header).html(heading);
+                var stops = result.stops;
+                for (var i = 0; i < stops.length; i++) {
+                    var stop = stops[i];
+                    $('<th></th>')
+                        .appendTo(header)
+                        .html(values(stop))
+                        .bind(isTouch ? 'touchend' : 'mouseup', getRequestSender(stop.SiteId));
+                }
             }
 
             function getSiteId(stop) {
@@ -84,16 +87,16 @@ function createStation(isTouch) {
         }
 
         function bindEvent() {
-            function getRequestSender(id) {
-                return function () {
-                    sendRequest(id);
-                };
-            }
-
             var ev = isTouch ? 'touchend' : 'mouseup';
             $('#predecessor').bind(ev, getRequestSender(getPredecessor()));
             $('#title').bind(ev, getRequestSender(getCurrent()));
             $('#successor').bind(ev, getRequestSender(getSuccessor()));
+        }
+
+        function getRequestSender(id) {
+            return function () {
+                sendRequest(id);
+            };
         }
 
         var trains = result.trains;
