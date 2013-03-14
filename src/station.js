@@ -113,6 +113,8 @@ function createStation(isTouch) {
             function setCountdowns() {
                 var now = new Date();
 
+                $('#clock').html(now.toTimeString());
+
                 $('span.countdown').each(function () {
                     var time = $(this).data('time');
                     $(this).html(countdown.getCountdown(time, now));
